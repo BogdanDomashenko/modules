@@ -1,16 +1,14 @@
 
-const http = require('http');
+const express = require('express');
+const mongoose = require('mongoose');
 
-const hostname = '127.0.0.1';
-const port = 3000;
-const users = [{name: 'Domashenko', age:'18'},{name: 'user002', age:'322'}];
+const app = express();
+const port = process.env.PORT || 3000;
+const routes = require('./routes.js');
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/json');
-  res.end(users);
-});
+const User = require('./models/UserModel.js');
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+mongoose.connect('mongodb://localhost/users_db');
+
+routes(app);
+app.listen(port);
